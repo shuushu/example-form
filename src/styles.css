@@ -1,0 +1,5 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.setAuthentication[aria-expanded='false'] + div{display: none;}
