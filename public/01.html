@@ -11,25 +11,145 @@
 
 <body>
 	<div id="wrap">
-    <div id="header"><img src="./asset/imgs/header.png" alt=""></div>
+      <div id="header"><img src="./asset/imgs/header.png" alt=""></div>
       <div>
         <img class="l" src="./asset/imgs/obj_drop_outline.png" alt="">
-        <img class="l" src="./asset/imgs/obj_drop_inline.png" alt="">
+        <img class="l animated infinite neon" src="./asset/imgs/obj_drop_inline.png" alt="">
         <img class="l" src="./asset/imgs/obj_money_outline.png" alt="">
-        <img class="l" src="./asset/imgs/obj_money_inline.png" alt="">
+        <img class="l animated " src="./asset/imgs/obj_money_inline.png" alt="">
+        <img class="l animated infinite neon2" src="./asset/imgs/obj_money_inline2.png" alt="">
         <img class="l base" src="./asset/imgs/obj_fire2.png" alt="">
         <img class="l fire" src="./asset/imgs/obj_fire.png" alt="">
         <img class="l" src="./asset/imgs/text_cash.png" alt="">
       </div>
 
+      <div class="money">
+        <img class="l l1" src="./asset/imgs/moneydrop_left01.png" alt="">
+        <img class="l l2" src="./asset/imgs/moneydrop_left02.png" alt="">
+        <img class="l l3" src="./asset/imgs/moneydrop_left03.png" alt="">
+
+        <img class="l r2" src="./asset/imgs/moneydrop_right02.png" alt="">
+        <img class="l r1" src="./asset/imgs/moneydrop_right01.png" alt="">        
+        <img class="l r3" src="./asset/imgs/moneydrop_right03.png" alt="">
+      </div>
+
+      <div class="adv">
+        <img class="l animated infinite bounce" src="./asset/imgs/obj_bigmoney.png" alt="">
+        <img class="l animated infinite rotateDownLeft" src="./asset/imgs/obj_hand_left.png" alt="">
+        <img class="l animated infinite rotateDownRight" src="./asset/imgs/obj_hand_right.png" alt="">
+        <img class="l animated infinite zoomIn" src="./asset/imgs/text_ouk.png" alt="">
+      </div>
+
+      <div>
+        <img class="l reward" src="./asset/imgs/text_reward.png" alt="">
+        <img class="l animated infinite sns-outline" src="./asset/imgs/sns.png" alt="">
+        <img class="l sns" src="./asset/imgs/sns_icon.png" alt="">
+        <img src="./asset/imgs/obj_footmoney.png" alt="">
+      </div>
+      <img class="joinbtn" role="button" src="./asset/imgs/btn_join.png">
   </div>
 
+  <!-- 참여화면 -->
+  <div class="l joinLayer">
+    <a href="#" class="close">닫기</a>
+    <img class="top animated" src="./asset/imgs/close_top.jpg" alt="">
+    <img class="bottom animated" src="./asset/imgs/close_bottom.jpg" alt="">
+    <a href="./index.html" class="play">송금하기</a>
+  </div>
 
 <script>
+let DATA;
 const $ = (s) => document.querySelector(s);
+// 참여하기 버튼 픽스드 해제
+const setBtnJoinStaticPostion = (v) => {
+  DATA.btn.setAttribute('style', `position: absolute;top:${v}px;`);
+}
+// 참여하기 새 레이어
+const showJoinLayer = () => {
+  window.scrollTo(0,0)
+  document.getElementById('wrap').setAttribute('style',`height:${DATA.joinLayer}px;overflow:hidden`);
+  $('.joinLayer').setAttribute('style','visibility: visible;z-index:999;');
+  setBtnJoinStaticPostion($('.sns').clientHeight);
 
-$('.base').classList.add('ani')
-$('.fire').classList.add('ani')
+  $('.joinLayer .top').classList.add('bounceInDown');
+  $('.joinLayer .bottom').classList.add('bounceUp');
+}  
+// 참여하기 레이어 닫기
+const closeJoinLayer = () => {    
+  document.getElementById('wrap').removeAttribute('style')
+  $('.joinLayer').removeAttribute('style');
+  setBtnJoinStaticPostion($('.sns').clientHeight);
+
+  $('.joinLayer .top').classList.remove('bounceInDown');
+  $('.joinLayer .bottom').classList.remove('bounceUp');
+}  
+
+// 한 화면에 다 보일 때 '참여하기 버튼' 픽스드 해제
+const checkedStaticPosition = () => {
+  if (window.innerHeight >= $('.sns').clientHeight) {
+    setBtnJoinStaticPostion($('.sns').clientHeight)
+  }
+}
+
+// 스크롤 이벤트가 트리거 할 y값: number
+function cacluPosition(t) {
+  return t - window.innerHeight
+}
+
+window.addEventListener('load', () => {  
+  setTimeout(()=>$('.money').classList.add('ani'), 600);
+
+  const getPosition = () => {
+      return {
+        rewadY: cacluPosition($('.reward').clientHeight),
+        snsY: cacluPosition($('.sns').clientHeight),
+        btnY: cacluPosition($('.joinbtn').clientHeight),
+        btn: $('.joinbtn'),
+        joinLayer: $('.joinLayer').clientHeight
+      }    
+  }
+  
+  DATA = getPosition();
+  // 참여하기 클릭 이벤트
+  DATA.btn.addEventListener('click',showJoinLayer);
+  // 참여하기레이어 닫기 이벤트
+  $('.joinLayer .close').addEventListener('click',closeJoinLayer);
+
+
+  // 한 화면에 다 보일 때 '참여하기 버튼' 픽스드 해제
+  checkedStaticPosition();
+
+  window.addEventListener('scroll', () => {
+    let y = this.scrollY;
+    let reward = $('.reward');
+
+    //SNS불 밝히기 효과
+    if(y >= DATA.rewadY + DATA.btn.clientHeight*2) {
+      $('.sns-outline').classList.add('neon2');
+    }
+
+    // 동전 효과
+    $('.l1').setAttribute('style',`transform:translate(0,${100-y/10}%);transition: all 0.05s;`);
+    $('.l2').setAttribute('style',`transform:translate(0,${450-y/5}%);transition: all 0.05s;`);
+    $('.l3').setAttribute('style',`transform:translate(0,${600-y/4}%);transition: all 0.05s;`);
+
+    $('.r1').setAttribute('style',`transform:translate(0,${330-y/5}%);transition: all 0.05s;`);
+    $('.r2').setAttribute('style',`transform:translate(0,${450-y/5}%);transition: all 0.05s;`);
+    $('.r3').setAttribute('style',`transform:translate(0,${350-y/10}%);transition: all 0.05s;`);
+
+    // 참여하기 포지션 변환
+    if (y >= DATA.snsY + DATA.btn.clientHeight) {
+      setBtnJoinStaticPostion($('.sns').clientHeight)
+    } else {
+      DATA.btn.removeAttribute('style')
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    DATA = getPosition();
+    checkedStaticPosition();
+  })
+});
 </script>
 </body>
 </html>
