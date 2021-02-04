@@ -61,16 +61,15 @@
 let DATA;
 const $ = (s) => document.querySelector(s);
 // 참여하기 버튼 픽스드 해제
-const setBtnJoinStaticPostion = (v) => {
-  DATA.btn.setAttribute('style', `position: absolute;top:${v}px;`);
+const setBtnJoinStaticPostion = (v) => {    
+   $('.joinbtn').setAttribute('style', `position: absolute;top:${v}px;`);
 }
 // 참여하기 새 레이어
 const showJoinLayer = () => {
-  window.scrollTo(0,0)
+  window.scrollTo(0,0);
   document.getElementById('wrap').setAttribute('style',`height:${DATA.joinLayer}px;overflow:hidden`);
   $('.joinLayer').setAttribute('style','visibility: visible;z-index:999;');
-  setBtnJoinStaticPostion($('.sns').clientHeight);
-
+  setBtnJoinStaticPostion($('.sns').clientHeight);  
   $('.joinLayer .top').classList.add('bounceInDown');
   $('.joinLayer .bottom').classList.add('bounceUp');
 }  
@@ -104,14 +103,13 @@ window.addEventListener('load', () => {
         rewadY: cacluPosition($('.reward').clientHeight),
         snsY: cacluPosition($('.sns').clientHeight),
         btnY: cacluPosition($('.joinbtn').clientHeight),
-        btn: $('.joinbtn'),
         joinLayer: $('.joinLayer').clientHeight
       }    
   }
   
   DATA = getPosition();
   // 참여하기 클릭 이벤트
-  DATA.btn.addEventListener('click',showJoinLayer);
+   $('.joinbtn').addEventListener('click',showJoinLayer);
   // 참여하기레이어 닫기 이벤트
   $('.joinLayer .close').addEventListener('click',closeJoinLayer);
 
@@ -124,7 +122,7 @@ window.addEventListener('load', () => {
     let reward = $('.reward');
 
     //SNS불 밝히기 효과
-    if(y >= DATA.rewadY + DATA.btn.clientHeight*2) {
+    if(y >= DATA.rewadY +  $('.joinbtn').clientHeight*2) {
       $('.sns-outline').classList.add('neon2');
     }
 
@@ -138,10 +136,13 @@ window.addEventListener('load', () => {
     $('.r3').setAttribute('style',`transform:translate(0,${350-y/10}%);transition: all 0.05s;`);
 
     // 참여하기 포지션 변환
-    if (y >= DATA.snsY + DATA.btn.clientHeight) {
+    if (y >= DATA.snsY +  $('.joinbtn').clientHeight) {
       setBtnJoinStaticPostion($('.sns').clientHeight)
     } else {
-      DATA.btn.removeAttribute('style')
+      // 참여하기 레이어 창이 열릴때 예외처리
+      if (!document.getElementById('wrap').getAttribute('style')) {
+        $('.joinbtn').removeAttribute('style')
+      }
     }
   });
 
